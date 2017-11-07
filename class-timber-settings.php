@@ -43,12 +43,43 @@ class NC_TimberSettings {
         $path_list = array();
 
         foreach ($template_dirs as $subdir) {
-            $subdirs = get_subdirectories($basepath . $subdir, $basepath);
+            $subdirs = $this->get_subdirectories($basepath . $subdir, $basepath);
             if ($subdirs) {
                 $path_list = array_merge($path_list, $subdirs);
             }
         }
 
         Timber::$dirname = $path_list;
+    }
+
+    public function get_subdirectories($pathstring, $root)
+    {
+        // Utility function to get subdirectories of a given set of directories as an array, stripped of the root path (used to generate template locations)
+
+        if ( function_exists( 'get_subdirectories' ) ) {
+            return get_subdirectories( $pathstring, $root );
+        }
+
+        $path = realpath($pathstring);
+    
+        if (file_exists($path)) {
+            $objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path), RecursiveIteratorIterator::SELF_FIRST);
+
+            $found_paths = array();
+
+            foreach ($objects as $name => $object) {
+                if ($object->getFilename() == '.') {
+                    $path_parts = explode($root, $object->getPath(), 2);
+
+                    unset($path_parts[0]);
+                    $path_stripped = implode('', $path_parts);
+
+                    $found_paths[] = $path_stripped;
+                }
+            }
+
+            return $found_paths;
+        }
+        return false;
     }
 }
