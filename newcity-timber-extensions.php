@@ -8,8 +8,9 @@
  *
  * @wordpress-plugin
  * Plugin Name:       NewCity Timber Extensions
+ * Plugin URI: https://github.com/newcity/newcity-timber-extensions
  * Description:       Tools to extend Timber's default tools
- * Version:           0.1.0-dev
+ * Version:           0.1.1-dev
  * Author:            NewCity  <geeks@insidenewcity.com>
  * Author URI:        http://insidenewcity.com
  * License:           NONE
@@ -22,6 +23,7 @@
  }
 
 require_once( dirname( __FILE__ ) . '/class-timber-settings.php');
+require_once( dirname( __FILE__ ) . '/class-twig-tools.php');
 
 function init_nc_timber_extensions() {
     if ( class_exists ( 'TimberPost' ) ) {
@@ -30,6 +32,7 @@ function init_nc_timber_extensions() {
 }
 
 function init_nc_timber_settings() {
+    $twig_filters = new NC_Twig_Tools();
     $timber_settings = new NC_TimberSettings();
 }
 
