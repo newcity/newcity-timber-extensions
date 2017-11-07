@@ -26,7 +26,12 @@ class NC_TimberPost extends TimberPost {
     // if $pos == 0, return the top level ancestor
     public function ancestors( $pos = false ) {
         if ( ! $this->_ancestors ) {
-            $this->_ancestors = get_post_ancestors( $this->ID );
+            if ( is_post_type_hierarchical( $this->post_type ) ) {
+                $this->_ancestors = get_post_ancestors( $this->ID );
+            } else {
+                $this->_ancestors = false;
+                return false;
+            }
         }
 
         $count = count( $this->_ancestors );

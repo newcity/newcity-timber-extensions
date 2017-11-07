@@ -10,7 +10,7 @@
  * Plugin Name:       NewCity Timber Extensions
  * Plugin URI: https://github.com/newcity/newcity-timber-extensions
  * Description:       Tools to extend Timber's default tools
- * Version:           0.2.0-dev
+ * Version:           0.2.1-dev
  * Author:            NewCity  <geeks@insidenewcity.com>
  * Author URI:        http://insidenewcity.com
  * License:           NONE
