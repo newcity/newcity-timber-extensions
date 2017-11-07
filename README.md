@@ -21,5 +21,20 @@ commonly-needed functions and properties. When writing new TimberPost classes, y
 
 ## `NC_TimberPost`
 
-This class currently does very little beyond the default `TimberPost` behavior. Its only extended behavior is the
-addition of `{{ post.newcity_info }}`, which is a demo function that returns a string. More functions will be added in the future.
+* `post.ancestors`  
+  Returns an array of post IDs for all ancestors of the current (hierarchical) page or post, starting with
+  the top-level ancestor and ending with the post's direct parent. If the post has no ancestors, this returns `false`.
+* `post.ancestors( $pos )`  
+  Passing an integer to `post.ancestors` returns a single post ID of the ancestor `$pos` steps removed from
+  the current post. For example, `post.ancestors(1)` would return the current post's parent, and `post.ancestors(2)`
+  would return its grandparent.  
+  A position of `0` will return the top-level ancestor, as will passing any value greater than the total number of
+  ancestors.
+* `post.top_ancestor`  
+  Shorthand for `post.ancestors(0)`
+* `post.breadcrumbs`  
+  Returns an array of objects containing information about the current post's ancestors, suitable for building
+  a breadcrumb navigation list. Each object contains the following values:
+  * `title`: the title of the page/post
+  * `ID`: The post ID of the page/post
+  * `url`: The permalink to the page/post
