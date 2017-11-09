@@ -15,6 +15,8 @@ class NC_TimberPost extends TimberPost {
     var $_breadcrumbs;
     var $_ancestors;
     var $_top_ancestor;
+    var $_full_text;
+    var $_get_excerpt;
 
     public function newcity_info() {
         return 'This site was created by NewCity';
@@ -88,6 +90,95 @@ class NC_TimberPost extends TimberPost {
             $this->_breadcrumbs = $breadcrumbs_list;
         }
 		return $this->_breadcrumbs;
+    }
+    
+    public function full_text( $post_id = null, $length = null, $exclude = null, $delimiter = ' &bull; ' ) {
+
+        if ( ! $this->_full_text ) {
+
+            if ( ! $post_id ) {
+                $post_id = $this->ID;
+            }
+
+            $post = get_post( $post_id );
+
+            $fulltext = $post->post_content;
+
+            $all_fields = get_field_objects( $post_id );
+
+            if ( ! $all_fields ) {
+                $this->_full_text = $fulltext;
+                return $fulltext;
+            }
+
+            foreach ( $all_fields as $field_name => $field ) {
+                if ( 'text' === $field['type'] || 'textarea' === $field['type'] || 'wysiwyg' === $field['type'] ) {
+                    if ( ! $exclude || ! in_array( $field['name'], $exclude ) ) {
+                        $fulltext = $fulltext . $field['value'] . $delimiter;
+                    }
+                }
+
+                if ( $length && str_word_count( $fulltext, 0 ) >= $length ) {
+                    $fulltext = apply_filters( 'the_content', $fulltext );
+                    $fulltext = str_replace( ']]>', ']]&gt;', $fulltext );
+                    $this->_full_text = $fulltext;
+                    return $fulltext;
+                }
+            }
+            $this->_full_text = $fulltext;
+            return $fulltext;
+        }
+        return $this->_full_text;
+
+	}
+
+	public function get_excerpt( $post_id = null, $length = 22 ) {
+        if ( ! $this->_get_excerpt ) {
+            $exclude = [
+                'name_first',
+                'name_middle',
+                'name_surname',
+                'credentials',
+                'titles',
+                'address',
+                'phone',
+                'contact_name',
+                'email',
+                'office',
+                'website',
+                'twitter',
+            ];
+
+            if ( ! $post_id ) {
+                if ( isset( $this->excerpt ) ) {
+                    $this->_get_excerpt = $this->excerpt;
+                    return $this->excerpt;
+                }
+
+                $post_id = $this->ID;
+            }
+
+            $transient_excerpt = get_transient( 'excerpt_' . $post_id );
+
+            if ( empty( $transient_excerpt ) ) {
+                $custom_excerpt = get_the_excerpt( $post_id );
+                if ( $custom_excerpt ) {
+                    $this->_get_excerpt = $custom_excerpt;
+                    return $custom_excerpt;
+                }
+
+                $generated_excerpt = wp_trim_words( $this->full_text( $post_id, 22, $exclude ), $length );
+
+                set_transient( 'excerpt_' . $post_id, $generated_excerpt, 10 );
+
+                $this->_get_excerpt = $generated_excerpt;
+                return $generated_excerpt;
+            }
+            $this->_get_excerpt = $transient_excerpt;
+            return $transient_excerpt;
+        }
+
+        return $this->_get_excerpt;
 	}
 
 }
