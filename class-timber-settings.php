@@ -38,6 +38,7 @@ class NC_TimberSettings {
         $template_dirs = array(
             'templates',
             'partials',
+            'twig-components'
         );
 
         $path_list = array();
