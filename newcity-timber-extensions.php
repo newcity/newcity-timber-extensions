@@ -10,7 +10,7 @@
  * Plugin Name:       NewCity Timber Extensions
  * Plugin URI: https://github.com/newcity/newcity-timber-extensions
  * Description:       Tools to extend Timber's default tools
- * Version:           0.2.1-dev
+ * Version:           0.2.2-dev
  * Author:            NewCity  <geeks@insidenewcity.com>
  * Author URI:        http://insidenewcity.com
  * License:           NONE
@@ -22,20 +22,21 @@
      die;
  }
 
-require_once( dirname( __FILE__ ) . '/class-timber-settings.php');
-require_once( dirname( __FILE__ ) . '/class-twig-tools.php');
+if ( class_exists( 'Timber' ) ) {
+    require_once( dirname( __FILE__ ) . '/class-timber-settings.php');
+    require_once( dirname( __FILE__ ) . '/class-twig-tools.php');
 
-function init_nc_timber_extensions() {
-    if ( class_exists ( 'TimberPost' ) ) {
-        require_once( dirname( __FILE__ ) . '/class-timber-extensions.php');
+    function init_nc_timber_extensions() {
+        if ( class_exists ( 'TimberPost' ) ) {
+            require_once( dirname( __FILE__ ) . '/class-timber-extensions.php');
+        }
     }
+
+    function init_nc_timber_settings() {
+        $twig_filters = new NC_Twig_Tools();
+        $timber_settings = new NC_TimberSettings();
+    }
+
+    add_action( 'plugins_loaded', 'init_nc_timber_extensions' );
+    add_action( 'plugins_loaded', 'init_nc_timber_settings' );
 }
-
-function init_nc_timber_settings() {
-    $twig_filters = new NC_Twig_Tools();
-    $timber_settings = new NC_TimberSettings();
-}
-
-add_action( 'plugins_loaded', 'init_nc_timber_extensions' );
-add_action( 'plugins_loaded', 'init_nc_timber_settings' );
-
