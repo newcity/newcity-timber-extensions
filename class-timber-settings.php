@@ -34,7 +34,8 @@ class NC_TimberSettings {
     // Finds all twig files located in $template_dirs directories, including
     // subdirectories
 	function set_templates_directory() {
-        $basepath = get_stylesheet_directory() . '/';
+        $parent_basepath = get_template_directory() . '/';
+        $current_basepath = get_stylesheet_directory() . '/';
         $template_dirs = array(
             'templates',
             'partials',
@@ -44,9 +45,18 @@ class NC_TimberSettings {
         $path_list = array();
 
         foreach ($template_dirs as $subdir) {
-            $subdirs = $this->get_subdirectories($basepath . $subdir, $basepath);
+            $subdirs = $this->get_subdirectories($current_basepath . $subdir, $current_basepath);
             if ($subdirs) {
                 $path_list = array_merge($path_list, $subdirs);
+            }
+        }
+
+        if ( $parent_basepath !== $current_basepath ) {
+            foreach ($template_dirs as $subdir) {
+                $subdirs = $this->get_subdirectories($parent_basepath . $subdir, $parent_basepath);
+                if ($subdirs) {
+                    $path_list = array_merge($path_list, $subdirs);
+                }
             }
         }
 
