@@ -13,7 +13,7 @@
 class NC_TimberSettings {
 
     public function __construct() {
-        add_filter( 'timber/cache/location', array( $this, 'custom_change_twig_cache_dir' ) );
+        // add_filter( 'timber/cache/location', array( $this, 'custom_change_twig_cache_dir' ) );
         add_action( 'after_setup_theme', array( $this, 'set_templates_directory' ) );
         $this->enable_timber_cache();
     }
