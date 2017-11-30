@@ -13,9 +13,14 @@
 class NC_TimberSettings {
 
     public function __construct() {
-        // add_filter( 'timber/cache/location', array( $this, 'custom_change_twig_cache_dir' ) );
         add_action( 'after_setup_theme', array( $this, 'set_templates_directory' ) );
-        $this->enable_timber_cache();
+        if ( get_option( 'timber_cache_enabled') ) {
+            $this->enable_timber_cache();
+
+            if ( get_option( 'timber_cache_path' ) ) {
+                add_filter( 'timber/cache/location', array( $this, 'custom_change_twig_cache_dir' ) );
+            }
+        }
     }
 
     /**
@@ -23,7 +28,7 @@ class NC_TimberSettings {
     * We want to use wp-content/uploads/timber-cache
     */
     public function custom_change_twig_cache_dir() {
-        return WP_CONTENT_DIR . '/uploads/timber-cache';
+        return get_option( 'timber_cache_path' );
     }
 
     public function enable_timber_cache() {
