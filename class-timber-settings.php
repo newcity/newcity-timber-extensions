@@ -13,7 +13,8 @@
 class NC_TimberSettings {
 
     public function __construct() {
-        add_action( 'after_setup_theme', array( $this, 'set_templates_directory' ) );
+        add_action( 'init', array( $this, 'set_templates_directory' ) );
+
         if ( get_option( 'timber_cache_enabled') ) {
             $this->enable_timber_cache();
 
