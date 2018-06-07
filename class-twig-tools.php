@@ -20,7 +20,7 @@ class NC_Twig_Tools {
 		/* this is where you can add your own fuctions to twig */
 		$twig->addExtension( new Twig_Extension_StringLoader() );
 		$twig->addFilter( new Twig_SimpleFilter( 'quoteswap', array( $this, 'swap_quotes' ) ) );
-		$twig->addFilter( new Twig_SimpleFilter( 'print_r', array( $this, 'print_r_custom' ) ) );
+		$twig->addFilter( new Twig_SimpleFilter( 'pre', array( $this, 'print_r_custom' ) ) );
 		return $twig;
     }
     
