@@ -37,10 +37,14 @@ function init_nc_timber_settings() {
     if ( class_exists( 'TimberPost' ) ) {
         $twig_filters = new NC_Twig_Tools();
         $timber_settings = new NC_TimberSettings();
-
     }
 }
 
 
 add_action( 'plugins_loaded', 'init_nc_timber_extensions' );
-add_action( 'plugins_loaded', 'init_nc_timber_settings' );
+add_action( 'nc_timber_classes_loaded', 'init_nc_timber_settings' );
+
+// Don't wait for other plugins if Timber is already running
+if ( class_exists( 'TimberPost' ) ) {
+    init_nc_timber_extensions();
+}
