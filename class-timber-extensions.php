@@ -43,7 +43,7 @@ class NC_TimberPost extends TimberPost {
         }
 
         if ( $pos === 0 || $pos > $count ) {
-            return $this->_ancestors[0];
+            return $this->_ancestors[$count - 1];
         }
 
         if ( gettype( $pos ) === 'integer' ) {
