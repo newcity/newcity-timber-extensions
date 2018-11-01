@@ -45,7 +45,8 @@ class NC_TimberSettings {
         $template_dirs = array(
             'templates',
             'partials',
-            'twig-components'
+            'twig-components',
+	    'pattern-library'
         );
 
         $path_list = array();
