@@ -179,6 +179,13 @@ class NC_TimberPost extends TimberPost {
         }
 
         return $this->_get_excerpt;
-	}
+    }
+    
+    public function template() {
+        if ( $this->_wp_page_template ) {
+            return pathinfo($this->_wp_page_template, PATHINFO_FILENAME);;
+        }
+        return false;
+    }
 
 }
